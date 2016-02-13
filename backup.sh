@@ -101,12 +101,12 @@ for DBNAME in ${DBASES}; do
 done
 
 ##### Сохраняем GRANTS
+USERS_HOSTS=`/usr/local/bin/mysql -u ${DBUSER} -B -N -p"${DBPASS}" -e "SELECT user, host FROM user" mysql`
+
+# \todo Тестируем, перенёс ниже
 SAVEIFS=$IFS
 IFS='
 '
-
-USERS_HOSTS=`/usr/local/bin/mysql -u ${DBUSER} -B -N -p"${DBPASS}" -e "SELECT user, host FROM user" mysql`
-
 for USER_HOST in ${USERS_HOSTS}; do
 	NULL_STRING=0	#индикатор пустой строки
 	#echo ${USER_HOST}

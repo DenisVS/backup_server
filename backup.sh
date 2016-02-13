@@ -36,9 +36,24 @@ echo "backup has been done at $TIMEDUMP on backup_system.tgz" >> ${LOG}
 #cp /usr/local/etc/apache22/httpd.conf.maintenance  /usr/local/etc/apache22/httpd.conf
 #/usr/local/sbin/apachectl restart
 
-##### Сохраняем WWW 
-tar cvfz ${DIR}/${TIMENAME}/backup_www.tar.gz ${WWW}
-chmod 666 ${DIR}/${TIMENAME}/backup_www.tar.gz
+##### Сохраняем WWW (Старая версия, все сайты в кучу)
+#tar cvfz ${DIR}/${TIMENAME}/backup_www.tar.gz ${WWW}
+#chmod 666 ${DIR}/${TIMENAME}/backup_www.tar.gz
+#TIMEDUMP=`date '+%T %x'`
+#echo "backup has been done at $TIMEDUMP on backup_www.tgz" >> ${LOG}
+
+##### Сохраняем WWW (Новая версия, каждый сайт в отдельной директории)
+/bin/mkdir -p ${DIR}/${TIMENAME}/www
+LIST_OF_DIRS=`/bin/ls -l ${WWW} | /usr/bin/awk '{if ($1 ~ /d.*/) print $9}' | /usr/bin/awk -F\/ '{print $1}'`
+SAVEIFS=$IFS
+IFS='
+'
+for CURRENT_DIR in ${LIST_OF_DIRS}; do
+    echo Pack directory ${CURRENT_DIR}
+    tar cvfz ${DIR}/${TIMENAME}/www/${CURRENT_DIR}.tar.gz ${WWW}/${CURRENT_DIR}
+    chmod 666 ${DIR}/${TIMENAME}/www/${CURRENT_DIR}.tar.gz
+done
+IFS=$SAVEIFS
 TIMEDUMP=`date '+%T %x'`
 echo "backup has been done at $TIMEDUMP on backup_www.tgz" >> ${LOG}
 

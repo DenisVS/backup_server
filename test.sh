@@ -1,4 +1,5 @@
 #!/bin/sh
+# $Id$
 DIR="/data/backup"
 WWW="/data/sites"
 TIMENAME=`date '+%Y-%m-%d-%H%M'`

@@ -10,6 +10,7 @@ DBPASS="mypassword"
 DBHOST="localhost"
 LOG="/data/backup/backup.log"
 ARCHIVER="bzip2"
+PAUSE=10
 
 #######################################################
 if [ "${ARCHIVER}" = "gzip" ]; then
@@ -41,11 +42,9 @@ chmod -R 777 ${DIR}/${TIMENAME}
 # Сохраняем системную конфигурацию
 tar cvf${TAR_OPT} ${DIR}/${TIMENAME}/backup_system.tar.${ARCH_EXT} /etc /usr/local/etc /boot/loader.conf /var/cron/tabs /var/db/mysql/my.cnf /root/.ssh 
 chmod 666 ${DIR}/${TIMENAME}/backup_system.tar.${ARCH_EXT}
-
-
 TIMEDUMP=`date '+%T %x'`
 echo "backup has been done at $TIMEDUMP on backup_system.tar.${ARCH_EXT}" >> ${LOG}
-
+sleep ${PAUSE}
 #cp /usr/local/etc/apache22/httpd.conf.maintenance  /usr/local/etc/apache22/httpd.conf
 #/usr/local/sbin/apachectl restart
 
@@ -65,6 +64,7 @@ for CURRENT_DIR in ${LIST_OF_DIRS}; do
     echo Pack directory ${CURRENT_DIR}
     tar cvf${TAR_OPT} ${DIR}/${TIMENAME}/www/${CURRENT_DIR}.tar.${ARCH_EXT} ${WWW}/${CURRENT_DIR}
     chmod 666 ${DIR}/${TIMENAME}/www/${CURRENT_DIR}.tar.${ARCH_EXT}
+    sleep ${PAUSE}
 done
 IFS=$SAVEIFS
 TIMEDUMP=`date '+%T %x'`
@@ -75,19 +75,21 @@ tar cvf${TAR_OPT} ${DIR}/${TIMENAME}/base/backup_radicale.tar.${ARCH_EXT} /var/d
 chmod 666 ${DIR}/${TIMENAME}/base/backup_radicale.tar.${ARCH_EXT}
 TIMEDUMP=`date '+%T %x'`
 echo "backup has been done at $TIMEDUMP on backup_radicale.tar.${ARCH_EXT}" >> ${LOG}
+sleep ${PAUSE}
 
 # Закатываем SVN
 tar cvf${TAR_OPT} ${DIR}/${TIMENAME}/base/backup_svn.tar.${ARCH_EXT} /data/svn
 chmod 666 ${DIR}/${TIMENAME}/base/backup_svn.tar.${ARCH_EXT}
 TIMEDUMP=`date '+%T %x'`
 echo "backup has been done at $TIMEDUMP on backup_svn.tar.${ARCH_EXT}" >> ${LOG}
+sleep ${PAUSE}
 
 # Закатываем TRAC
 tar cvf${TAR_OPT} ${DIR}/${TIMENAME}/base/backup_trac.tar.${ARCH_EXT} /data/trac
 chmod 666 ${DIR}/${TIMENAME}/base/backup_trac.tar.${ARCH_EXT}
 TIMEDUMP=`date '+%T %x'`
 echo "backup has been done at $TIMEDUMP on backup_trac.tar.${ARCH_EXT}" >> ${LOG}
-
+sleep ${PAUSE}
 
 #cp /usr/local/etc/apache22/httpd.conf.current  /usr/local/etc/apache22/httpd.conf
 #/usr/local/sbin/apachectl restart
@@ -111,6 +113,7 @@ for DBNAME in ${DBASES}; do
     fi
     TIMEDUMP=`date '+%T %x'`
     echo "backup has been done at $TIMEDUMP on db: ${DBNAME}" >> ${LOG}
+    sleep ${PAUSE}
 done
 
 ##### Сохраняем GRANTS
@@ -140,7 +143,7 @@ for USER_HOST in ${USERS_HOSTS}; do
 		done
 	fi
 done
-
+sleep ${PAUSE}
 IFS=$SAVEIFS
 
 ##### Сохраняем информацию о приложениях

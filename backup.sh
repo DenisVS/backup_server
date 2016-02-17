@@ -1,4 +1,5 @@
 #!/bin/sh
+# $Id:
 DIR="/data/backup"
 WWW="/data/sites"
 TIMENAME=`date '+%Y-%m-%d-%H%M'`
@@ -8,7 +9,19 @@ DBUSER="root"
 DBPASS="mypassword"
 DBHOST="localhost"
 LOG="/data/backup/backup.log"
+ARCHIVER="bzip2"
 
+#######################################################
+if [ "${ARCHIVER}" = "gzip" ]; then
+    ARCH_EXT="gz"
+    TAR_OPT="z"
+    ARCH_APP="/usr/bin/gzip"
+fi
+if [ "${ARCHIVER}" = "bzip2" ]; then
+    ARCH_EXT="bz2"
+    TAR_OPT="j"
+    ARCH_APP="/usr/bin/bzip2"
+fi
 
 killall php
 mkdir -p ${DIR}

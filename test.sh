@@ -8,14 +8,14 @@ DBUSER="root"
 DBPASS="mypassword"
 DBHOST="localhost"
 LOG="/data/backup/backup.log"
-ARC="bzip2"
+ARCHIVER="bzip2"
 
-if [ "${ARC}" = "gzip" ]; then
+if [ "${ARCHIVER}" = "gzip" ]; then
     ARCH_EXT="gz"
     TAR_OPT="z"
     ARCH_APP="/usr/bin/gzip"
 fi
-if [ "${ARC}" = "bzip2" ]; then
+if [ "${ARCHIVER}" = "bzip2" ]; then
     ARCH_EXT="bz2"
     TAR_OPT="j"
     ARCH_APP="/usr/bin/bzip2"

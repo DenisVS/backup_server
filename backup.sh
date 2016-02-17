@@ -3,7 +3,7 @@ DIR="/data/backup"
 WWW="/data/sites"
 TIMENAME=`date '+%Y-%m-%d-%H%M'`
 TRUNCATE_CACHE="1"
-GZIP_BASE="1"
+ARCH_BASE="1"
 DBUSER="root"
 DBPASS="mypassword"
 DBHOST="localhost"
@@ -89,7 +89,7 @@ for DBNAME in ${DBASES}; do
 		/usr/local/bin/mysql -u${DBUSER} -h ${DBHOST} -p${DBPASS} ${DBNAME} -Bse "truncate table ${TABLENAME};"
 	done
     fi
-    if [ "${GZIP_BASE}" = "1" ]; then
+    if [ "${ARCH_BASE}" = "1" ]; then
 	/usr/local/bin/mysqldump -u${DBUSER} -h ${DBHOST} -p${DBPASS} ${DBNAME} | /usr/bin/gzip -c > "${DIR}/${TIMENAME}/base/mysql/${DBNAME}.sql.gz" 
 	chmod 666 ${DIR}/${TIMENAME}/base/mysql/${DBNAME}.sql.gz
     else
